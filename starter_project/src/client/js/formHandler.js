@@ -1,30 +1,53 @@
 // Replace checkForName with a function that checks the URL
-import { checkForName } from './nameChecker'
+import { checkForUrl } from './urlChecker'
+import { displayResults } from './displayResults';
 
 // If working on Udacity workspace, update this with the Server API URL e.g. `https://wfkdhyvtzx.prod.udacity-student-workspaces.com/api`
 // const serverURL = 'https://wfkdhyvtzx.prod.udacity-student-workspaces.com/api'
-const serverURL = 'https://localhost:8000/api'
+const serverURL = 'http://localhost:8000'
 
 const form = document.getElementById('urlForm');
-form.addEventListener('submit', handleSubmit);
-
+if (form) {
+    form.addEventListener('submit', handleSubmit);
+}
+const formResults = document.getElementById('results');
 function handleSubmit(event) {
     event.preventDefault();
 
-    // Get the URL from the input field
     const formText = document.getElementById('name').value;
 
-    // This is an example code that checks the submitted name. You may remove it from your code
-    checkForName(formText);
-    
-    // Check if the URL is valid
- 
-        // If the URL is valid, send it to the server using the serverURL constant above
-      
+    if (checkForUrl(formText)) {
+        console.log('::: Form Submitted :::');
+        postData(formText);
+    }
 }
 
 // Function to send data to the server
+const postData = async (formText) => {
+    const formResults = document.getElementById('results');
 
+    fetch(serverURL + "/analyze-url", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: formText }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        // formResults.innerHTML = JSON.stringify(data);
+        displayResults(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    })
+};
 // Export the handleSubmit function
 export { handleSubmit };
 

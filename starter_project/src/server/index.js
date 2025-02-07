@@ -69,9 +69,10 @@ app.post('/analyze-url', async (req, res) => {
         const response = await axios.post('https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer', { text });
         return res.json(response.data); // Send the NLP results back to the client
         */
-
+        const response = await axios.post('https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer', { text });
+        return res.json(response.data);
         // Placeholder response for learners to complete
-        return res.json({ message: 'NLP analysis result will be here. Complete the API call above!' });
+        // return res.json({ message: 'NLP analysis result will be here. Complete the API call above!' });
     } catch (error) {
         console.error('Error during URL processing or API request:', error.message);
         return res.status(500).json({ error: 'Failed to analyze the URL' });
