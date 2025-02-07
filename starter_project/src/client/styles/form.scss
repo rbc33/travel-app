@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box; /* Ensure padding and borders are included in element's total width and height */
+}
+
+body {
+    font-family: Arial, sans-serif; /* Set a default font */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+form {
+    border: 1px solid #545454;
+    border-radius: 3px;
+    padding: 40px;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 5px 20px;
+    width: 100%;
+    line-height: 16px;
+    margin: 10px 0;
+}
+
+.results {
+    display: grid; /* Use grid layout */
+    grid-template-columns: 1fr; /* Default to one column */
+    gap: 20px; /* Space between items */
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #545454;
+    border-radius: 3px;
+    background-color: #f0f0f0;
+}
+
+@media (min-width: 768px) {
+    .results {
+        grid-template-columns: 1fr 1fr; /* Two columns for larger screens */
+    }
+}
+
+.results img {
+    width: 100%; /* Ensure the image fits within the results container */
+    max-width: 200px; /* Limit image size */
+}

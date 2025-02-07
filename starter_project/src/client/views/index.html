@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Test</title>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather and Image Display</title>
+</head>
 
-    <body>
+<body>
 
-        <header>
-            <div class="">
-                Logo
-            </div>
-            <div class="">
-                navigation
-            </div>
-        </header>
+<header>
+    <div class="">
+        Logo
+    </div>
+    <div class="">
+        Navigation
+    </div>
+</header>
 
-        <main>
-            <section>
-                <form id="urlForm">
-                    <input id="name" type="text" name="url" placeholder="Enter URL" required>
-                    <button id="submitButton" type="submit">Submit</button>
-                </form>
-                
-            </section>
+<main>
+    <section>
+        <form id="urlForm">
+            <input id="destination" type="text" name="destination" placeholder="Enter your destination" required>
+            <input id="date" type="date" name="date" placeholder="Enter your departure date" required>
+            <button id="submitButton" type="submit">Submit</button>
+        </form>
+    </section>
 
-            <section>
-                <strong>Form Results:</strong>
-                <div id="results"></div>
-            </section>
-        </main>
+    <section>
+        <div class="results" id="results">
+            <!-- Results will be displayed here -->
+        </div>
+    </section>
+</main>
 
-        <footer>
-            <p>This is a footer</p>
-        </footer>
+<footer>
+    <p>This is a footer</p>
+</footer>
 
-    </body>
+</body>
 </html>

@@ -2,8 +2,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-const cheerio = require('cheerio');
 const cors = require('cors');
+require('dotenv').config()
+
+const WEATHER_API_KEY = process.env["WEATHER_API_KEY"]
+const PIXABAY_API_KEY = process.env["PIXABAY_API_KEY"]
 
 // Initialize the Express application
 const app = express();
@@ -13,66 +16,75 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(bodyParser.json()); // Parse JSON request bodies
 
 // Encapsulated function to scrape text from a URL
-async function scrapeTextFromURL(url) {
+const getCoords = async (dest) => {
     try {
-        console.log(`Fetching and scraping text from URL: ${url}`);
+        console.log(`Fetching coord for location: ${dest}`);
 
         // Fetch the webpage data
-        const { data } = await axios.get(url);
+        const { data } = await axios.get(`http://api.geonames.org/geoCodeAddressJSON?q=${dest}&username=rudacity`);
 
         // Use Cheerio to load the HTML and extract the text
-        const $ = cheerio.load(data);
-        const text = $('body').text().trim();
-
-        // Check if text content exists
-        if (!text) {
-            console.error('No text content found at the provided URL');
-            return null;
+        const coords = {
+            "lat" : data.address.lat,
+            "lng" : data.address.lng
         }
-
-        // Extract and return the first 200 characters of the text
-        const trimmedText = text.slice(0, 200);
-        console.log(`Extracted Text (200 characters):\n${trimmedText}\n--- End of Text Preview ---`);
-        return trimmedText;
+        console.log(`Extracted coords:\nlat: ${coords.lat}\nlng: ${coords.lng}`);
+        return coords;
     } catch (error) {
         console.error('Error while scraping text from the URL:', error.message);
         throw new Error('Failed to scrape text from the URL');
     }
 }
+const getWeather = async (coords) => {
+    try {
+        console.log(`Fetching weather for location: ${coords.lat}, ${coords.lng}`);
 
-// Route to analyze text from a URL
-app.post('/analyze-url', async (req, res) => {
-    const { url } = req.body;
+        // Fetch the webpage data
+        const { data } = await axios.get(`https://api.weatherbit.io/v2.0/current?lat=${coords.lat}&lon=${coords.lng}&key=${WEATHER_API_KEY}`);
 
-    // Validate the input URL
-    if (!url) {
-        console.error('No URL provided in the request body');
-        return res.status(400).json({ error: 'URL is required' });
+        
+        const weather = {
+            "temp" : data.data[0].temp,
+            "description" : data.data[0].weather.description
+        }
+        console.log(`Extracted weather:\ntemp: ${weather.temp}\ndescription: ${weather.description}`);
+        return weather;
+    } catch (error) {
+        console.error('Error while scraping text from the URL:', error.message);
+        throw new Error('Failed to scrape text from the URL');
     }
+}
+const getImage = async (dest) => {
+    try {
+        console.log(`Fetching image for location: ${dest}`);
+
+        // Fetch the webpage data
+        const { data } = await axios.get(`https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${dest}&image_type=photo`);
+
+        
+        const image = data.hits[0].webformatURL;
+        console.log(`Extracted image:\n${image}`);
+        return image;
+    } catch (error) {
+        console.error('Error while scraping text from the URL:', error.message);
+        throw new Error('Failed to scrape text from the URL');
+    }
+}
+// Route to analyze text from a URL
+app.post('/getData', async (req, res) => {
+    const { formData } = req.body;
 
     try {
         // Step 1: Scrape text from the provided URL
-        const text = await scrapeTextFromURL(url);
-
-        if (!text) {
-            return res.status(400).json({ error: 'No text content found at the provided URL' });
+        const coords = await getCoords(formData.dest);
+        const weather = await getWeather(coords);
+        const image = await getImage(formData.dest);
+        const data = {
+            "weather" : weather,
+            "image" : image
         }
-
-        // Step 2: Connect to the AWS NLP API
-        // --- Learner Task: Add the code to send the extracted text to the AWS NLP API below ---
-        // Use `axios.post` to send a POST request to the API.
-        // The endpoint URL is: https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer
-        // Send the `text` as part of the request body.
-
-        /*
-        Example Code:
-        const response = await axios.post('https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer', { text });
-        return res.json(response.data); // Send the NLP results back to the client
-        */
-        const response = await axios.post('https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer', { text });
-        return res.json(response.data);
-        // Placeholder response for learners to complete
-        // return res.json({ message: 'NLP analysis result will be here. Complete the API call above!' });
+        return res.json(data);
+       
     } catch (error) {
         console.error('Error during URL processing or API request:', error.message);
         return res.status(500).json({ error: 'Failed to analyze the URL' });
