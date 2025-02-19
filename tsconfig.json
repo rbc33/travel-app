@@ -8,8 +8,11 @@
     "resolveJsonModule": true,
     "sourceMap": true
   },
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifiers": true
-  }
+  "exclude": [
+    "node_modules",
+    "**/*.spec.js",
+    "**/*.test.js",
+    "webpack.*.js",
+    "__test__/**/*"
+  ]
 }
