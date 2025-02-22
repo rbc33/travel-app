@@ -38,6 +38,16 @@ npm test
 
 ## Usage
 
+* Start the fontednd dev aplication in the 4000 port use: 
+```bash 
+npm run build-dev
+``` 
+* for starting the production mode run:
+```bash
+npm run build-prod
+cd dist && http-server
+```
+
 * Navigate to http://localhost:4000 in your browser.
 * Enter a destination and date in the form provided.
 * Submit the form to receive weather, image, and location data.
