@@ -40,10 +40,13 @@ npm test
 
 * Start the fontednd dev aplication in the 4000 port use: 
 ```bash 
+
 npm run build-dev
 ``` 
 * for starting the production mode run:
 ```bash
+rm -rf dist
+npm i -g http-server
 npm run build-prod
 cd dist && http-server
 ```
