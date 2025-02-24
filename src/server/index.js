@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { getCoords, getWeather, getImage, getWikiData, getLocations, } from './apis';
+import { getCoords, getWeather, getImage, getWikiData,
+// getLocations,
+ } from './apis';
 // Initialize the Express application
 const app = express();
 // Apply middleware
@@ -18,21 +20,14 @@ app.post('/getData', async (req, res) => {
         // Step 1: Scrape text from the provided URL
         const coords = await getCoords(formData.dest);
         const weather = await getWeather(coords);
-        const locations = await getLocations(coords);
+        // const locations = await getLocations(coords);
         const image = await getImage(formData.dest);
         const wiki = await getWikiData(formData.dest);
-        const data = locations
-            ? {
-                weather,
-                image,
-                locations,
-                wiki,
-            }
-            : {
-                weather,
-                image,
-                wiki,
-            };
+        const data = {
+            weather,
+            image,
+            wiki,
+        };
         console.log('Wiki data:', wiki);
         return res.json(data);
     }

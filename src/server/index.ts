@@ -7,7 +7,7 @@ import {
   getWeather,
   getImage,
   getWikiData,
-  getLocations,
+  // getLocations,
 } from './apis';
 // O alternativamente para dotenv:
 // const dotenv = require('dotenv');
@@ -60,17 +60,10 @@ app.post(
       // Step 1: Scrape text from the provided URL
       const coords: Coords = await getCoords(formData.dest);
       const weather: Weather = await getWeather(coords);
-      const locations = await getLocations(coords);
+      // const locations = await getLocations(coords);
       const image = await getImage(formData.dest);
       const wiki = await getWikiData(formData.dest);
-      const data = locations
-        ? {
-            weather,
-            image,
-            locations,
-            wiki,
-          }
-        : {
+      const data = {
             weather,
             image,
             wiki,
