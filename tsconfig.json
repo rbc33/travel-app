@@ -13,6 +13,7 @@
     "**/*.spec.js",
     "**/*.test.js",
     "webpack.*.js",
-    "__test__/**/*"
+    "__test__/**/*",
+    "dist/**/*"  // Add this line to exclude the dist directory
   ]
 }
