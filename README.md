@@ -18,6 +18,23 @@ This project is a web application that interacts with various APIs to provide we
 
 npm install
 
+### Set Environment Variables:
+change the api keys in the /server/api.ts file:
+```bash
+const WEATHER_API_KEY = process.env['WEATHER_API_KEY'];
+const PIXABAY_API_KEY = process.env['PIXABAY_API_KEY'];
+```
+with 
+```bash
+const WEATHER_API_KEY = "your_weather_api_key";
+const PIXABAY_API_KEY = "your_pixabay_api_key";
+```
+or create an .env file with the following keys:
+```bash
+WEATHER_API_KEY="your_weather_api_key"
+PIXABAY_API_KEY="your_pixabay_api_key"
+````
+
 ### Build the Project:
 
 For development:
